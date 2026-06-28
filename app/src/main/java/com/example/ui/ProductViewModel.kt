@@ -50,6 +50,18 @@ class ProductViewModel(private val repository: ProductRepository) : ViewModel() 
         initialValue = emptyList()
     )
 
+    private val _kalkulasiCartIds = MutableStateFlow<Set<Int>>(emptySet())
+    val kalkulasiCartIds: StateFlow<Set<Int>> = _kalkulasiCartIds.asStateFlow()
+
+    fun toggleKalkulasiCart(productId: Int) {
+        val current = _kalkulasiCartIds.value
+        _kalkulasiCartIds.value = if (current.contains(productId)) {
+            current - productId
+        } else {
+            current + productId
+        }
+    }
+
     fun addProduct(product: Product) {
         viewModelScope.launch {
             repository.insert(product)
